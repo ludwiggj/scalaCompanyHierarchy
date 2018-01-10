@@ -5,7 +5,7 @@ object PathFinder {
     if (args.size != 3) {
       throw new IllegalArgumentException("Usage: PathFinder <filename> <fromEmployeeName> <toEmployeeName>")
     } else {
-      println(Company(args(0)).findAllPaths(args(1), args(2)))
+      println(Company(args(0)).findShortestPath(args(1), args(2)))
     }
   }
 }
