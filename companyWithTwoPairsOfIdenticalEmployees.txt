@@ -4,4 +4,4 @@
 | 1           | Dangermouse     |            |
 | 666         | Batman          | 2          |
 | 21          | Animal          | 1          |
-| 37          | Animal          | 21          |
+| 37          | Animal          | 21         |

@@ -10,8 +10,12 @@ class Path(path: List[Node]) {
     Path(path.reverse)
   }
 
+  def length(): Int = {
+    path.length
+  }
+
   def matches(fromName: EmployeeName, toName: EmployeeName) = {
-    (path.size >= 2) && path.head.name.equals(fromName) && path.takeRight(1)(0).name.equals(toName)
+    (path.size >= 2) && path.head.name == fromName && path.takeRight(1)(0).name == toName
   }
 
   private def convertPair(pair: (Option[Node], Option[Node])): String = {

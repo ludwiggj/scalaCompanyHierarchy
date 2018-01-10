@@ -15,7 +15,7 @@ class Company(root: Node) {
     val employeeName = EmployeeName(employee)
 
     def walkTree(current: Node): List[Node] = {
-      val matches = if (employeeName.equals(current.name)) {
+      val matches = if (employeeName == current.name) {
         List(current)
       } else {
         List()
@@ -57,7 +57,7 @@ class Company(root: Node) {
         pathThroughParentNode(currentNode.parent, pathToCurrentNode, nodesVisitedSoFarPlusMe))
   }
 
-  def findAllPaths(fromEmployeeName: String, toEmployeeName: String): List[String] = {
+  def findAllPaths(fromEmployeeName: String, toEmployeeName: String): Paths = {
     val startNodes = for {
       startNodes <- Try(findEmployee(fromEmployeeName))
       endNodes <- Try(findEmployee(toEmployeeName))
@@ -71,11 +71,19 @@ class Company(root: Node) {
           startNode <- startNodes
         } yield findAllPaths(startNode, Path(), List()))
 
-        paths.whichContain(EmployeeName(fromEmployeeName), EmployeeName(toEmployeeName)).asListOfStrings()
+        paths.whichContain(EmployeeName(fromEmployeeName), EmployeeName(toEmployeeName))
 
       case Failure(ex) =>
         throw ex
     }
+  }
+
+  def findAllPathsAsListOfStrings(fromEmployeeName: String, toEmployeeName: String): List[String] = {
+    findAllPaths(fromEmployeeName, toEmployeeName).asListOfStrings()
+  }
+
+  def findShortestPath(fromEmployeeName: String, toEmployeeName: String): String = {
+    findAllPaths(fromEmployeeName, toEmployeeName).shortest.toString
   }
 }
 

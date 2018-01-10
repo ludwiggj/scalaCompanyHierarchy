@@ -3,9 +3,11 @@ package chart
 import Utils.trimLeadingAndTrailingSpaces
 
 case class EmployeeName(name: String) {
+
   override def equals(other: Any) = {
     other match {
-      case employeeName: EmployeeName => strippedAndInLowerCase.equals(employeeName.strippedAndInLowerCase)
+      case employeeName: EmployeeName =>
+        strippedAndInLowerCase == employeeName.strippedAndInLowerCase
       case _ => false
     }
   }
