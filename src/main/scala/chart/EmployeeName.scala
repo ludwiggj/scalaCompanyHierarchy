@@ -5,7 +5,7 @@ import Utils.trimLeadingAndTrailingSpaces
 case class EmployeeName(name: String) {
   override def equals(other: Any) = {
     other match {
-      case employeeName: EmployeeName => stripped.equals(employeeName.stripped)
+      case employeeName: EmployeeName => strippedAndInLowerCase.equals(employeeName.strippedAndInLowerCase)
       case _ => false
     }
   }
@@ -14,10 +14,10 @@ case class EmployeeName(name: String) {
 
   override def hashCode: Int =
     41 * (
-      41 + stripped.hashCode
+      41 + strippedAndInLowerCase.hashCode
       )
 
-  def stripped: String = {
+  def strippedAndInLowerCase: String = {
     trimLeadingAndTrailingSpaces(name).replaceAll("[ ]{2,}", " ").toLowerCase
   }
 }

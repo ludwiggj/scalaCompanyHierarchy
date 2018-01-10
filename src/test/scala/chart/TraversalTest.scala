@@ -232,6 +232,22 @@ class TraversalTest extends FlatSpec with Matchers {
     employees.size should equal(1)
   }
 
+  "Finding an employee that exists in the company" should "return the employee when taking string matching into account" in {
+    testFindEmployeeTakingStringMatchingIntoAccount(aTypicalCompany())
+  }
+
+  "Finding an employee that exists in the company" should "return the employee when taking string matching into account and when loaded from file" in {
+    testFindEmployeeTakingStringMatchingIntoAccount(Company("companyTypical.txt"))
+  }
+
+  def testFindEmployeeTakingStringMatchingIntoAccount(company: Company) = {
+    val employees = company.findEmployee("  SUper    TEd       ")
+
+    employees should contain(Node(Employee("Super Ted", 15))(-1))
+
+    employees.size should equal(1)
+  }
+
   "Finding an employee when there are two identically named employees" should "return both employees" in {
     testFindMultipleEmployees(aCompanyWithTwoIdenticalEmployeesWithDifferentManagers())
   }
@@ -266,24 +282,24 @@ class TraversalTest extends FlatSpec with Matchers {
     }
   }
 
-  "Stripped name of employee [ Gonzo   the Great  ]" should "be [gonzo the great]" in {
-    EmployeeName(" Gonzo   the Great  ").stripped should equal("gonzo the great")
+  "Stripped and lower case name of employee [ Gonzo   the Great  ]" should "be [gonzo the great]" in {
+    EmployeeName(" Gonzo   the Great  ").strippedAndInLowerCase should equal("gonzo the great")
   }
 
-  "Stripped name of employee [Gonzo the Great]" should "be [gonzo the great]" in {
-    EmployeeName("Gonzo the Great").stripped should equal("gonzo the great")
+  "Stripped and lower case name of employee [Gonzo the Great]" should "be [gonzo the great]" in {
+    EmployeeName("Gonzo the Great").strippedAndInLowerCase should equal("gonzo the great")
   }
 
-  "Stripped name of employee [gonzo the GREAT]" should "be [gonzo the great]" in {
-    EmployeeName("gonzo the GREAT").stripped should equal("gonzo the great")
+  "Stripped and lower case name of employee [gonzo the GREAT]" should "be [gonzo the great]" in {
+    EmployeeName("gonzo the GREAT").strippedAndInLowerCase should equal("gonzo the great")
   }
 
-  "Stripped name of employee [gOnZO]" should "be [gonzo]" in {
-    EmployeeName("gOnZO").stripped should equal("gonzo")
+  "Stripped and lower case name of employee [gOnZO]" should "be [gonzo]" in {
+    EmployeeName("gOnZO").strippedAndInLowerCase should equal("gonzo")
   }
 
-  "Stripped name of employee [Gon Zot Heg Reat]" should "be [gon zot heg reat]" in {
-    EmployeeName("Gon Zot Heg Reat").stripped should equal("gon zot heg reat")
+  "Stripped and lower case name of employee [Gon Zot Heg Reat]" should "be [gon zot heg reat]" in {
+    EmployeeName("Gon Zot Heg Reat").strippedAndInLowerCase should equal("gon zot heg reat")
   }
 
   "Paths between gonzos" should "return all paths" in {
@@ -307,6 +323,23 @@ class TraversalTest extends FlatSpec with Matchers {
     val company = Company("companyOfGonzos.txt");
 
     val allPaths = company.findAllPaths("gonzo the great", "gonzo the great")
+
+    allPaths should contain theSameElementsAs (
+      List(
+        "Gonzo   the Great (1) <- Gon Zot Heg Reat (2) <- gonzo the GREAT (3)",
+        "Gonzo   the Great (1) <- Gon Zot Heg Reat (2) <- gonzo the GREAT (3) <- gOnZO (4) <- Gonzo the Great (5)",
+        "gonzo the GREAT (3) -> Gon Zot Heg Reat (2) -> Gonzo   the Great (1)",
+        "gonzo the GREAT (3) <- gOnZO (4) <- Gonzo the Great (5)",
+        "Gonzo the Great (5) -> gOnZO (4) -> gonzo the GREAT (3)",
+        "Gonzo the Great (5) -> gOnZO (4) -> gonzo the GREAT (3) -> Gon Zot Heg Reat (2) -> Gonzo   the Great (1)")
+      )
+    allPaths.size should equal(6)
+  }
+
+  "Paths between gonzos" should "return all paths when taking string matching into account and when loaded from file" in {
+    val company = Company("companyOfGonzos.txt");
+
+    val allPaths = company.findAllPaths("gonzo    the grEat", "   goNzo the  GREAT   ")
 
     allPaths should contain theSameElementsAs (
       List(
