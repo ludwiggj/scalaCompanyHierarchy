@@ -25,10 +25,12 @@ class Paths(val list: List[Path]) {
   }
 
   def shortest: Path = {
-    val pathsByLength = new HashMap[Int, Set[Path]] with mutable.MultiMap[Int, Path]
-    list.foreach { path => pathsByLength.addBinding(path.length(), path) }
+    if (list.isEmpty) Path() else {
+      val pathsByLength = new HashMap[Int, Set[Path]] with mutable.MultiMap[Int, Path]
+      list.foreach { path => pathsByLength.addBinding(path.length(), path) }
 
-    pathsByLength.toSeq.sortBy(_._1).head._2.head
+      pathsByLength.toSeq.sortBy(_._1).head._2.head
+    }
   }
 }
 

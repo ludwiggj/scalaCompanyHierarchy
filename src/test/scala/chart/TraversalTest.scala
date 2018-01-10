@@ -60,6 +60,14 @@ class TraversalTest extends FlatSpec with Matchers {
     )
   }
 
+  "Shortest path from Batman to Batman" should "display empty string as no path exists" in {
+      val shortestPath = aTypicalCompany().findShortestPath("Batman", "Batman")
+
+      shortestPath should equal(
+        ""
+      )
+    }
+
   "Paths from an employee to someone she manages" should "point to the manager" in {
     testTypicalCompanyDangermouseToGonzoTheGreat(aCompanyWithTwoEmployees)
   }

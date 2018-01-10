@@ -29,13 +29,15 @@ class Path(path: List[Node]) {
   }
 
   override def toString = {
-    val pathWithOptionalNodes: List[Option[Node]] = path map (Some(_))
+    if (path.isEmpty) "" else {
+      val pathWithOptionalNodes: List[Option[Node]] = path map (Some(_))
 
-    val pathWithPointers = for {
-      pair <- pathWithOptionalNodes zipAll(pathWithOptionalNodes.tail, None, None)
-    } yield convertPair(pair)
+      val pathWithPointers = for {
+        pair <- pathWithOptionalNodes zipAll(pathWithOptionalNodes.tail, None, None)
+      } yield convertPair(pair)
 
-    pathWithPointers.mkString
+      pathWithPointers.mkString
+    }
   }
 }
 
