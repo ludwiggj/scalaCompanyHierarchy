@@ -1,0 +1,7 @@
+| Employee ID | Name            | Manager ID |
+| 16          | Batman          | 2          |
+| 2           | Gonzo the Great | 1          |
+| 1           | Dangermouse     |            |
+| 666         | Batman          | 2          |
+| 21          | Animal          | 1          |
+| 37          | Animal          | 21          |

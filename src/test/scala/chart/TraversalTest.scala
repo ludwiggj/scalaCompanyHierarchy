@@ -7,7 +7,14 @@ import org.scalatest.{FlatSpec, Matchers}
 class TraversalTest extends FlatSpec with Matchers {
 
   "Path from Dangermouse to Super Ted" should "return the correct path" in {
-    val company = aTypicalCompany();
+    testTypicalCompanyDangermouseToSuperTed(aTypicalCompany())
+  }
+
+  "Path from Dangermouse to Super Ted" should "return the correct path when loaded from file" in {
+    testTypicalCompanyDangermouseToSuperTed(Company("companyTypical.txt"))
+  }
+
+  def testTypicalCompanyDangermouseToSuperTed(company: Company): Unit = {
 
     val allPaths = company.findAllPaths("Dangermouse", "Super Ted")
 
@@ -19,8 +26,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Path from Batman to Catwoman" should "display arrows pointing to common manager" in {
-    val company = aTypicalCompany();
+    testTypicalCompanyBatmanToCatwoman(aTypicalCompany())
+  }
 
+  "Path from Batman to Catwoman" should "display arrows pointing to common manager when loaded from file" in {
+    testTypicalCompanyBatmanToCatwoman(Company("companyTypical.txt"))
+  }
+
+  def testTypicalCompanyBatmanToCatwoman(company: Company) = {
     val allPaths = company.findAllPaths("Batman", "Catwoman")
 
     allPaths should contain(
@@ -31,8 +44,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Path from an employee to someone she manages" should "point to the manager" in {
-    val company = aCompanyWithTwoEmployees();
+    testTypicalCompanyDangermouseToGonzoTheGreat(aCompanyWithTwoEmployees)
+  }
 
+  "Path from an employee to someone she manages" should "point to the manager when loaded from file" in {
+    testTypicalCompanyDangermouseToGonzoTheGreat(Company("companyWithTwoEmployees.txt"))
+  }
+
+  def testTypicalCompanyDangermouseToGonzoTheGreat(company: Company) = {
     val allPaths = company.findAllPaths("Dangermouse", "Gonzo the Great")
 
     allPaths should contain(
@@ -43,8 +62,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Path from an employee to her manager" should "point to the manager" in {
-    val company = aCompanyWithTwoEmployees();
+    testTypicalCompanyGonzoTheGreatToDangermouse(aCompanyWithTwoEmployees())
+  }
 
+  "Path from an employee to her manager" should "point to the manager when loaded from file" in {
+    testTypicalCompanyGonzoTheGreatToDangermouse(Company("companyWithTwoEmployees.txt"))
+  }
+
+  def testTypicalCompanyGonzoTheGreatToDangermouse(company: Company) = {
     val allPaths = company.findAllPaths("Gonzo the Great", "Dangermouse")
 
     allPaths should contain(
@@ -55,8 +80,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Path from two identical employees" should "return both paths" in {
-    val company = aCompanyWithTwoIdenticalEmployeesWithTheSameManager();
+    testCompanyWithTwoEmployeesWithSameManagerBatmanToDangermouse(aCompanyWithTwoIdenticalEmployeesWithTheSameManager())
+  }
 
+  "Path from two identical employees" should "return both paths when loaded from file" in {
+    testCompanyWithTwoEmployeesWithSameManagerBatmanToDangermouse(Company("companyWithTwoIdenticalEmployeesWithTheSameManager.txt"))
+  }
+
+  def testCompanyWithTwoEmployeesWithSameManagerBatmanToDangermouse(company: Company) = {
     val allPaths = company.findAllPaths("Batman", "Dangermouse")
 
     allPaths should contain theSameElementsAs (
@@ -70,8 +101,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Path to two identical employees" should "return both paths" in {
-    val company = aCompanyWithTwoIdenticalEmployeesWithTheSameManager();
+    testCompanyWithTwoEmployeesWithSameManagerDangermouseToBatman(aCompanyWithTwoIdenticalEmployeesWithTheSameManager())
+  }
 
+  "Path to two identical employees" should "return both paths when loaded from file" in {
+    testCompanyWithTwoEmployeesWithSameManagerDangermouseToBatman(Company("companyWithTwoIdenticalEmployeesWithTheSameManager.txt"))
+  }
+
+  def testCompanyWithTwoEmployeesWithSameManagerDangermouseToBatman(company: Company) = {
     val allPaths = company.findAllPaths("Dangermouse", "Batman")
 
     allPaths should contain theSameElementsAs (
@@ -85,8 +122,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Path from one identical employee to another" should "return both paths" in {
-    val company = aCompanyWithTwoIdenticalEmployeesWithTheSameManager();
+    testCompanyWithTwoEmployeesWithSameManagerBatmanToBatman(aCompanyWithTwoIdenticalEmployeesWithTheSameManager())
+  }
 
+  "Path from one identical employee to another" should "return both paths when loaded from file" in {
+    testCompanyWithTwoEmployeesWithSameManagerBatmanToBatman(Company("companyWithTwoIdenticalEmployeesWithTheSameManager.txt"))
+  }
+
+  def testCompanyWithTwoEmployeesWithSameManagerBatmanToBatman(company: Company) = {
     val allPaths = company.findAllPaths("Batman", "Batman")
 
     allPaths should contain theSameElementsAs (
@@ -100,24 +143,42 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Attempt to find path when first employee does not exist" should "throw an EmployeeNotFoundException" in {
-    val company = aCompanyWithTwoEmployees();
+    testCannotFindFirstEmployee(aCompanyWithTwoEmployees())
+  }
 
+  "Attempt to find path when first employee does not exist" should "throw an EmployeeNotFoundException when loaded from file" in {
+    testCannotFindFirstEmployee(Company("companyWithTwoEmployees.txt"))
+  }
+
+  def testCannotFindFirstEmployee(company: Company) = {
     intercept[EmployeeNotFoundException] {
       company.findAllPaths("WhoIsHe", "Dangermouse")
     }
   }
 
   "Attempt to find path when second employee does not exist" should "throw an EmployeeNotFoundException" in {
-    val company = aCompanyWithTwoEmployees();
+    testCannotFindSecondEmployee(aCompanyWithTwoEmployees())
+  }
 
+  "Attempt to find path when second employee does not exist" should "throw an EmployeeNotFoundException when loaded from file" in {
+    testCannotFindSecondEmployee(Company("companyWithTwoEmployees.txt"))
+  }
+
+  def testCannotFindSecondEmployee(company: Company) = {
     intercept[EmployeeNotFoundException] {
       company.findAllPaths("Dangermouse", "WhoIsHe")
     }
   }
 
   "Path from identical employees to identical employees" should "return all paths" in {
-    val company = aCompanyWithTwoPairsOfIdenticalEmployees();
+    testCompanyWithTwoPairsOfIdenticalEmployeesBatmanToAnimal(aCompanyWithTwoPairsOfIdenticalEmployees())
+  }
 
+  "Path from identical employees to identical employees" should "return all paths when loaded from file" in {
+    testCompanyWithTwoPairsOfIdenticalEmployeesBatmanToAnimal(Company("companyWithTwoPairsOfIdenticalEmployees.txt"))
+  }
+
+  def testCompanyWithTwoPairsOfIdenticalEmployeesBatmanToAnimal(company: Company) = {
     val allPaths = company.findAllPaths("Batman", "Animal")
 
     allPaths should contain theSameElementsAs (
@@ -133,8 +194,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Path from identical employees to identical employees in opposite direction" should "return all paths" in {
-    val company = aCompanyWithTwoPairsOfIdenticalEmployees();
+    testCompanyWithTwoPairsOfIdenticalEmployeesAnimalToBatman(aCompanyWithTwoPairsOfIdenticalEmployees())
+  }
 
+  "Path from identical employees to identical employees in opposite direction" should "return all paths when loaded from file" in {
+    testCompanyWithTwoPairsOfIdenticalEmployeesAnimalToBatman(Company("companyWithTwoPairsOfIdenticalEmployees.txt"))
+  }
+
+  def testCompanyWithTwoPairsOfIdenticalEmployeesAnimalToBatman(company: Company) = {
     val allPaths = company.findAllPaths("Animal", "Batman")
 
     allPaths should contain theSameElementsAs (
@@ -150,8 +217,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Finding an employee that exists in the company" should "return the employee" in {
-    val company = aTypicalCompany();
+    testFindEmployee(aTypicalCompany())
+  }
 
+  "Finding an employee that exists in the company" should "return the employee when loaded from file" in {
+    testFindEmployee(Company("companyTypical.txt"))
+  }
+
+  def testFindEmployee(company: Company) = {
     val employees = company.findEmployee("Super Ted")
 
     employees should contain(Node(Employee("Super Ted", 15))(-1))
@@ -160,8 +233,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Finding an employee when there are two identically named employees" should "return both employees" in {
-    val company = aCompanyWithTwoIdenticalEmployeesWithDifferentManagers();
+    testFindMultipleEmployees(aCompanyWithTwoIdenticalEmployeesWithDifferentManagers())
+  }
 
+  "Finding an employee when there are two identically named employees" should "return both employees when loaded from file" in {
+    testFindMultipleEmployees(Company("companyWithTwoIdenticalEmployeesWithDifferentManagers.txt"))
+  }
+
+  def testFindMultipleEmployees(company: Company) = {
     val employees = company.findEmployee("Batman")
 
     employees should contain theSameElementsAs (
@@ -174,8 +253,14 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Finding an employee who does not work for the company" should "throw an EmployeeNotFoundException" in {
-    val company = aTypicalCompany();
+    testFindMissingEmployee(aTypicalCompany())
+  }
 
+  "Finding an employee who does not work for the company" should "throw an EmployeeNotFoundException when loaded from file" in {
+    testFindMissingEmployee(Company("companyTypical.txt"))
+  }
+
+  def testFindMissingEmployee(company: Company) = {
     intercept[EmployeeNotFoundException] {
       company.findEmployee("Not there")
     }
@@ -219,7 +304,7 @@ class TraversalTest extends FlatSpec with Matchers {
   }
 
   "Paths between gonzos" should "return all paths when loaded from file" in {
-    val company = Company("aCompanyOfGonzos.txt");
+    val company = Company("companyOfGonzos.txt");
 
     val allPaths = company.findAllPaths("gonzo the great", "gonzo the great")
 
